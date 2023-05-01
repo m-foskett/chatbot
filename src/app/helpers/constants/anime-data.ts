@@ -12,14 +12,14 @@ export const animeData = `
 <content>
     <anime>
     <url>https://myanimelist.net/anime/16498/Shingeki_no_Kyojin</url>
-    <desc>An anime about mankind trying to survive against giant humanoid creatures called Titans.</desc>
-    <rating>8.53</rating>
+    <synopsis>An anime about mankind trying to survive against giant humanoid creatures called Titans.</synopsis>
+    <score>8.53</score>
     <ranked>#110</ranked>
     </anime>
     <anime>
     <url>https://myanimelist.net/anime/5114/Fullmetal_Alchemist__Brotherhood</url>
-    <desc>An anime following two brothers after an alchemy experiment gone wrong.</desc>
-    <rating>9.10</rating>
+    <synopsis>An anime following two brothers after an alchemy experiment gone wrong.</synopsis>
+    <score>9.10</score>
     <ranked>#1</ranked>
     </anime>
 </content>
@@ -29,14 +29,14 @@ export const animeData = `
 <content>
     <anime>
     <url>https://myanimelist.net/anime/30276/One_Punch_Man</url>
-    <desc>An anime about an seemingly unimpressive man named Saitama following his dream of being a hero.</desc>
-    <rating>8.50</rating>
+    <synopsis>An anime about an seemingly unimpressive man named Saitama following his dream of being a hero.</synopsis>
+    <score>8.50</score>
     <ranked>#124</ranked>
     </anime>
     <anime>
     <url>https://myanimelist.net/anime/19815/No_Game_No_Life</url>
-    <desc>An anime following two stepsiblings transported into a mysterious world governed by simple games.</desc>
-    <rating>8.08</rating>
+    <synopsis>An anime following two stepsiblings transported into a mysterious world governed by simple games.</synopsis>
+    <score>8.08</score>
     <ranked>#485</ranked>
     </anime>
 </content>
