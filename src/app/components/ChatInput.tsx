@@ -1,10 +1,11 @@
 "use client"
 
+import { MessagesContext } from '@/context/messages';
 import { cn } from '@/lib/utils';
 import { Message } from '@/lib/validators/message';
 import { useMutation } from '@tanstack/react-query';
 import { nanoid } from 'nanoid';
-import { FC, HTMLAttributes, useState } from 'react'
+import { FC, HTMLAttributes, useContext, useRef, useState } from 'react'
 import TextareaAutosize from 'react-textarea-autosize';
 
 interface ChatInputProps extends HTMLAttributes<HTMLDivElement> {
@@ -13,7 +14,15 @@ interface ChatInputProps extends HTMLAttributes<HTMLDivElement> {
 
 const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
 
+    const textareaRef = useRef<HTMLTextAreaElement | null>(null);
     const [input, setInput] = useState<string>('');
+    const {
+        messages,
+        addMessage,
+        removeMessage,
+        updateMessage,
+        setIsMessageUpdating,
+    } = useContext(MessagesContext);
 
     const { mutate: sendMessage, isLoading } = useMutation({
         mutationFn: async (message: Message) => {
@@ -27,21 +36,24 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
 
             return response.body;
         },
+        onMutate(message) {
+            addMessage(message);
+        },
         onSuccess: async (stream) => {
-            if (!stream) throw new Error('No stream found')
+            if (!stream) throw new Error('No stream found');
 
-            // construct new message to add
-            // const id = nanoid()
-            // const responseMessage: Message = {
-            //   id,
-            //   isUserMessage: false,
-            //   text: '',
-            // }
+            // Construct new message
+            const id = nanoid();
+            const responseMessage: Message = {
+              id,
+              isUserMessage: false,
+              text: '',
+            };
 
-            // add new message to state
-            // addMessage(responseMessage)
-
-            // setIsMessageUpdating(true)
+            // Add new message to state
+            addMessage(responseMessage)
+            // Set isMessageUpdating to true to use in UI
+            setIsMessageUpdating(true)
 
             // Stream Reader
             const reader = stream.getReader()
@@ -51,28 +63,28 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
             let done = false;
 
             while (!done) {
-                const { value, done: doneReading } = await reader.read()
+                const { value, done: doneReading } = await reader.read();
                 done = doneReading;
                 // Decode and turn into readable string
                 const chunkValue = decoder.decode(value);
-            //   updateMessage(id, (prev) => prev + chunkValue);
-                console.log(chunkValue);
+                updateMessage(id, (prev) => prev + chunkValue);
             };
 
-            // clean up
-            // setIsMessageUpdating(false)
-            // setInput('')
+            // Clean up
+            setIsMessageUpdating(false);
+            setInput('');
 
-            // setTimeout(() => {
-            //   textareaRef.current?.focus()
-            // }, 10)
-          },
+            setTimeout(() => {
+              textareaRef.current?.focus();
+            }, 10);
+        },
     })
 
     return (
         <div {...props} className={cn('border-t border-zinc-300', className)}>
             <div className='relative mt-4 flex-1 overflow-hidden rounded-lg border-none outline-none'>
                 <TextareaAutosize
+                    ref={textareaRef}
                     onKeyDown={(e) => {
                         if(e.key === 'Enter' && !e.shiftKey) {
                             e.preventDefault();
