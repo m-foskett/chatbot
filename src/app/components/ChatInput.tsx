@@ -22,14 +22,51 @@ const ChatInput: FC<ChatInputProps> = ({ className, ...props }) => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({messages: 'hello' })
+                body: JSON.stringify({ messages: [message] })
             });
 
             return response.body;
         },
-        onSuccess: () => {
-            console.log('Success');
-        }
+        onSuccess: async (stream) => {
+            if (!stream) throw new Error('No stream found')
+
+            // construct new message to add
+            // const id = nanoid()
+            // const responseMessage: Message = {
+            //   id,
+            //   isUserMessage: false,
+            //   text: '',
+            // }
+
+            // add new message to state
+            // addMessage(responseMessage)
+
+            // setIsMessageUpdating(true)
+
+            // Stream Reader
+            const reader = stream.getReader()
+            // Stream Decoder
+            const decoder = new TextDecoder()
+
+            let done = false;
+
+            while (!done) {
+                const { value, done: doneReading } = await reader.read()
+                done = doneReading;
+                // Decode and turn into readable string
+                const chunkValue = decoder.decode(value);
+            //   updateMessage(id, (prev) => prev + chunkValue);
+                console.log(chunkValue);
+            };
+
+            // clean up
+            // setIsMessageUpdating(false)
+            // setInput('')
+
+            // setTimeout(() => {
+            //   textareaRef.current?.focus()
+            // }, 10)
+          },
     })
 
     return (
