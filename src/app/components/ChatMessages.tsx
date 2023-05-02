@@ -43,14 +43,13 @@ const ChatMessages: FC<ChatMessagesProps> = ({ className, ...props }) => {
                                         'bg-gray-200 text-gray-900': !message.isUserMessage,
                                     })}
                                 >
-                                    {/* <MarkdownLite text={message.text} /> */}
-                                    {message.text}
+                                    <MarkdownLite text={message.text} />
                                 </p>
                             </div>
                         </div>
                     </div>
-                );
-            })};
+                )
+            })}
         </div>
     );
 };

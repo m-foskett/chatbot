@@ -2,46 +2,53 @@ import React from 'react'
 import Link from 'next/link'
 
 const MarkdownLite = ({ text }: { text: string }) => {
-  const linkRegex = /\[(.+?)\]\((.+?)\)/g
-  const parts = []
+    // Regex to check for links
+    const linkRegex = /\[(.+?)\]\((.+?)\)/g;
+    const parts = [];
 
-  let lastIndex = 0
-  let match
+    let lastIndex = 0;
+    let match;
 
-  while ((match = linkRegex.exec(text)) !== null) {
-    const [fullMatch, linkText, linkUrl] = match
-    const matchStart = match.index
-    const matchEnd = matchStart + fullMatch.length
+    // Use Regex Expression to test for links
+    while ((match = linkRegex.exec(text)) !== null) {
 
-    if (lastIndex < matchStart) {
-      parts.push(text.slice(lastIndex, matchStart))
-    }
+        const [fullMatch, linkText, linkUrl] = match;
+        const matchStart = match.index;
+        const matchEnd = matchStart + fullMatch.length;
 
-    parts.push(
-      <Link
-        target='_blank'
-        rel='noopener noreferrer'
-        className='break-words underline underline-offset-2 text-blue-600'
-        key={linkUrl}
-        href={linkUrl}>
-        {linkText}
-      </Link>
-    )
+        if (lastIndex < matchStart) {
+          parts.push(text.slice(lastIndex, matchStart));
+        };
+        // Create link
+        parts.push(
+          <Link
+            target='_blank'
+            rel='noopener noreferrer'
+            className='break-words underline underline-offset-2 text-blue-600'
+            key={linkUrl}
+            href={linkUrl}>
+            {linkText}
+          </Link>
+        );
+        // Keep searching
+        lastIndex = matchEnd;
+    };
 
-    lastIndex = matchEnd
-  }
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex))
+    };
 
-  if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex))
-  }
+    return (
+      <>
+        {parts.map((part, i) => (
+          <React.Fragment
+            key={i}
+          >
+            {part}
+          </React.Fragment>
+        ))}
+      </>
+    );
+};
 
-  return (
-    <>
-      {parts.map((part, i) => (
-        <React.Fragment key={i}>{part}</React.Fragment>
-      ))}
-    </>
-  )
-}
-
-export default MarkdownLite
+export default MarkdownLite;
